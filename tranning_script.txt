@@ -1,0 +1,200 @@
+import numpy as np
+import pandas as pd
+import tensorflow as tf
+from tensorflow import keras
+from tensorflow.keras import layers
+import matplotlib.pyplot as plt
+from sklearn.model_selection import train_test_split
+from sklearn.metrics import confusion_matrix, classification_report,ConfusionMatrixDisplay
+
+df = pd.read_csv('/content/drive/MyDrive/Phising-DataSet/dataset_phishing.csv')
+df.head(10)
+#Gán nhãn cho dataset với "phishing = 1", "legitimate = 0"
+from sklearn import preprocessing
+le = preprocessing.LabelEncoder()
+df['labels'] = le.fit_transform(df['status'])
+df[['status','labels']].head(10)
+Y1 = df['labels']
+X1 = df.drop(columns = ['url','labels','status'])
+X1.head(2)
+X2 = df['url']
+X2.head(2)
+from sklearn.model_selection import train_test_split
+X_train1,X_test1,Y_train1,Y_test1 = train_test_split(X1,Y1,stratify = Y1,test_size = 0.2,random_state = 42)
+X_train1 = np.expand_dims(X_train1, axis=-1)
+X_test1 = np.expand_dims(X_test1, axis=-1)
+
+X_train1.shape
+import nltk
+nltk.download('stopwords')
+import re
+from nltk.corpus import stopwords
+from nltk.stem import PorterStemmer
+from sklearn.feature_extraction.text import CountVectorizer
+from sklearn.feature_extraction.text import TfidfVectorizer
+ps = PorterStemmer()
+corpus_train = []
+
+def albumentations(X,corpus_t):
+    for i in range(len(X)):
+        print(i,"/",len(X))
+        review = re.sub("[^a-zA-Z]"," ",X[i])
+        review = review.lower()
+        review = review.split()
+        review = [ps.stem(word) for word in review if word not in set(stopwords.words("english"))] #TO REMOVE STOP WORDS LIKE THE, A ETC
+        review = " ".join(review)
+        corpus_t.append(review)
+		
+albumentations(X2,corpus_train)
+corpus_train[:4]
+cv =TfidfVectorizer(max_features = 1000)
+X2 = cv.fit_transform(corpus_train).toarray()
+X_train2 = np.expand_dims(X_train2, axis = -1)
+X_test2 = np.expand_dims(X_test2, axis = -1)
+print(X_train2.shape,Y_train2.shape)
+print(X_test2.shape,Y_test2.shape)
+
+input_size1 = X_train1[1].shape
+input_size2 = X_train2[2].shape
+input_size1,input_size2
+
+def eval_graph(results):
+
+    acc = results.history['accuracy']
+    val_acc = results.history['val_accuracy']
+    epochs = range(len(acc))
+    fig = plt.figure(figsize=(14,7))
+    plt.plot(epochs,acc,'r',label="Training Accuracy")
+    plt.plot(epochs,val_acc,'b',label="Validation Accuracy")
+    plt.legend(loc='upper left')
+    plt.title("ACCURACY GRAPH")
+    plt.show()
+
+    loss = results.history['loss']
+    val_loss = results.history['val_loss']
+    epochs = range(len(loss))
+    fig = plt.figure(figsize=(14,7))
+    plt.plot(epochs,loss,'r',label="Training loss")
+    plt.plot(epochs,val_loss,'b',label="Validation loss")
+    plt.legend(loc='upper left')
+    plt.title("LOSS GRAPH")
+    plt.show()
+	
+from keras import Sequential
+
+def CNN(input_size):
+
+    model = keras.Sequential()
+    model.add(layers.Input(input_size))
+    model.add(layers.Conv1D(filters = 16,kernel_size = 3,activation = 'relu',padding = 'same'))
+    model.add(layers.Dropout(0.2))
+    model.add(layers.BatchNormalization())
+    model.add(layers.MaxPooling1D(pool_size = 2,padding = 'same'))
+    model.add(layers.Conv1D(filters = 32,kernel_size = 3,activation = 'relu',padding = 'same'))
+    model.add(layers.Dropout(0.2))
+    model.add(layers.BatchNormalization())
+    model.add(layers.MaxPooling1D(pool_size = 2,padding = 'same'))
+    model.add(layers.Conv1D(filters = 64,kernel_size = 3,activation = 'relu',padding = 'same'))
+    model.add(layers.Dropout(0.2))
+    model.add(layers.BatchNormalization())
+    model.add(layers.MaxPooling1D(pool_size = 2,padding = 'same'))
+    model.add(layers.Conv1D(filters = 128,kernel_size = 3,activation = 'relu',padding = 'same'))
+    model.add(layers.Dropout(0.2))
+    model.add(layers.BatchNormalization())
+    model.add(layers.MaxPooling1D(pool_size = 2,padding = 'same'))
+    model.add(layers.Conv1D(filters = 256,kernel_size = 3,activation = 'relu',padding = 'same'))
+    model.add(layers.Dropout(0.2))
+    model.add(layers.BatchNormalization())
+    model.add(layers.MaxPooling1D(pool_size = 2,padding = 'same'))
+    model.add(layers.Flatten())
+    model.add(layers.Dropout(0.3))
+    model.add(layers.Dense(512,activation = 'relu'))
+    model.add(layers.Dropout(0.3))
+    model.add(layers.Dense(1,activation = 'sigmoid'))
+
+    return model
+
+CNN_model1 = CNN(input_size1)
+CNN_model2 = CNN(input_size2)
+CNN_model1.summary()
+CNN_model2.summary()
+
+CNN_model1.compile(optimizer='adam',loss='binary_crossentropy',metrics=['accuracy'])
+
+callbacks = [tf.keras.callbacks.ModelCheckpoint('CNN_MODEL_ON_FEATURE_EXTRACTED.h5',verbose=1,save_best_only=True),
+             tf.keras.callbacks.EarlyStopping(monitor='val_loss',min_delta=0.001,patience=30,verbose=1)]
+CNN_results_1 = CNN_model1.fit(X_train1,Y_train1,validation_split=0.2,batch_size=128,epochs=200,callbacks=callbacks)
+
+CNN_model1.evaluate(X_test1,Y_test1,verbose = 1)
+eval_graph(CNN_results_1)
+
+Y_test1
+conf_matrix(X_test1,Y_test1,CNN_model1)
+
+CNN_model2.compile(optimizer='adam',loss='binary_crossentropy',metrics=['accuracy'])
+
+callbacks = [tf.keras.callbacks.ModelCheckpoint('CNN_MODEL_ON_NON_FEATURE_EXTRACTED.h5',verbose=1,save_best_only=True),
+             tf.keras.callbacks.EarlyStopping(monitor='val_loss',min_delta=0.001,patience=30,verbose=1)]
+CNN_results_2 = CNN_model2.fit(X_train2,Y_train2,validation_split=0.2,batch_size=128,epochs=200,callbacks=callbacks)
+
+CNN_model2.evaluate(X_test2,Y_test2,verbose = 1)
+eval_graph(CNN_results_2)
+conf_matrix(X_test2,Y_test2,CNN_model2)
+
+def CNN_LSTM(input_size):
+    model = keras.Sequential()
+    model.add(layers.Input(input_size))
+    model.add(layers.Conv1D(filters = 16,kernel_size = 3,activation = 'relu',padding = 'same'))
+    model.add(layers.Dropout(0.2))
+    model.add(layers.BatchNormalization())
+    model.add(layers.MaxPooling1D(pool_size = 2,padding = 'same'))
+    model.add(layers.Conv1D(filters = 32,kernel_size = 3,activation = 'relu',padding = 'same'))
+    model.add(layers.Dropout(0.2))
+    model.add(layers.BatchNormalization())
+    model.add(layers.MaxPooling1D(pool_size = 2,padding = 'same'))
+    model.add(layers.Conv1D(filters = 64,kernel_size = 3,activation = 'relu',padding = 'same'))
+    model.add(layers.Dropout(0.2))
+    model.add(layers.BatchNormalization())
+    model.add(layers.MaxPooling1D(pool_size = 2,padding = 'same'))
+    model.add(layers.Conv1D(filters = 128,kernel_size = 3,activation = 'relu',padding = 'same'))
+    model.add(layers.Dropout(0.2))
+    model.add(layers.BatchNormalization())
+    model.add(layers.MaxPooling1D(pool_size = 2,padding = 'same'))
+    model.add(layers.Conv1D(filters = 256,kernel_size = 3,activation = 'relu',padding = 'same'))
+    model.add(layers.Dropout(0.2))
+    model.add(layers.BatchNormalization())
+    model.add(layers.LSTM(128,return_sequences=True))
+    model.add(layers.Dropout(0.3))
+    model.add(layers.Flatten())
+    model.add(layers.Dense(128,activation = 'relu'))
+    model.add(layers.Dropout(0.3))
+    model.add(layers.Dense(128,activation = 'relu'))
+    model.add(layers.Dropout(0.3))
+    model.add(layers.Dense(1,activation = 'sigmoid'))
+
+    return model
+
+CNN_LSTM_model1 = CNN_LSTM(input_size1)
+CNN_LSTM_model1.summary()
+CNN_LSTM_model2 = CNN_LSTM(input_size2)
+CNN_LSTM_model2.summary()
+
+CNN_LSTM_model1.compile(optimizer='adam',loss='binary_crossentropy',metrics=['accuracy'])
+
+callbacks = [tf.keras.callbacks.ModelCheckpoint('CNN_LSTM_MODEL_ON_FEATURE_EXTRACTED.h5',verbose=1,save_best_only=True),
+             tf.keras.callbacks.EarlyStopping(monitor='val_loss',min_delta=0.001,patience=30,verbose=1)]
+CNN_LSTM_results_1 = CNN_LSTM_model1.fit(X_train1,Y_train1,validation_split=0.2,batch_size=128,epochs=200,callbacks=callbacks)
+
+CNN_LSTM_model1.evaluate(X_test1,Y_test1)
+eval_graph(CNN_LSTM_results_1)
+conf_matrix(X_test1,Y_test1,CNN_LSTM_model1)
+
+CNN_LSTM_model2.compile(optimizer='adam',loss='binary_crossentropy',metrics=['accuracy'])
+
+callbacks = [tf.keras.callbacks.ModelCheckpoint('CNN_LSTM_MODEL_ON_NON_FEATURE_EXTRACTED.h5',verbose=1,save_best_only=True),
+             tf.keras.callbacks.EarlyStopping(monitor='val_loss',min_delta=0.001,patience=30,verbose=1)]
+CNN_LSTM_results_2 = CNN_LSTM_model2.fit(X_train2,Y_train2,validation_split=0.2,batch_size=128,epochs=200,callbacks=callbacks)
+
+CNN_LSTM_model2.evaluate(X_test2,Y_test2)
+eval_graph(CNN_LSTM_results_2)
+conf_matrix(X_test2,Y_test2,CNN_LSTM_model2)
