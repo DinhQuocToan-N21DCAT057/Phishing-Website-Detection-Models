@@ -11,7 +11,7 @@ RUN apt-get update && apt-get install -y \
 WORKDIR /app
 
 # Clone project từ Git (thay LINK_GIT = repo của bạn)
-RUN git clone https://github.com/YOUR_USERNAME/YOUR_PROJECT.git /app
+RUN git clone https://github.com/DinhQuocToan-N21DCAT057/Phishing-Website-Detection-Models /app
 
 # Cài thư viện Python
 COPY requirements.txt .
