@@ -57,7 +57,7 @@ if __name__=="__main__":
         nltk.download('stopwords')
 
     # Define paths
-    BASE_DIR = r"D:\Hoc Tap\Giao Trinh va Bai Tap\2024-2025\HKII\ATMangNangCao\CuoiKy\LSTM-CNN-Phishing-Website"
+    BASE_DIR = os.path.abspath(os.path.join(os.path.dirname(__file__), ".."))
     DATASET_PATH = r"D:\Hoc Tap\Giao Trinh va Bai Tap\2024-2025\HKII\ATMangNangCao\CuoiKy\LSTM-CNN-Phishing-Website\script\website_extracted_features.csv"  # Update if needed
     VECTORIZER_PATH = os.path.join(BASE_DIR, "tfidf_vectorizer.pkl")  # Update if saved elsewhere
 

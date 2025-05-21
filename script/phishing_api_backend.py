@@ -22,8 +22,11 @@ except LookupError:
 app = Flask(__name__)
 
 # Đường dẫn các file cần thiết
-BASE_DIR = r"D:\Hoc Tap\Giao Trinh va Bai Tap\2024-2025\HKII\ATMangNangCao\CuoiKy\LSTM-CNN-Phishing-Website"
+BASE_DIR = os.path.abspath(os.path.join(os.path.dirname(__file__), ".."))
 VECTORIZER_PATH = os.path.join(BASE_DIR, "tfidf_vectorizer.pkl")
+
+print("BASE_DIR:", BASE_DIR)
+print("Exists:", os.path.exists(os.path.join(BASE_DIR, "CNN_MODEL_ON_FEATURE_EXTRACTED.h5")))
 
 # Load mô hình
 cnn_model1 = load_model(os.path.join(BASE_DIR, "CNN_MODEL_ON_FEATURE_EXTRACTED.h5"))
