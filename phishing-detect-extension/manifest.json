@@ -1,0 +1,29 @@
+{
+    "manifest_version": 3,
+    "name": "Phishing Detector",
+    "version": "1.0",
+    "description": "Advanced phishing detection using multiple ML models (CNN-LSTM and CNN)",
+    "author": "DinhToan21057",
+    "permissions": [
+      "activeTab",
+      "scripting",
+      "tabs"
+    ],
+    "action": {
+      "default_popup": "popup.html",
+      "default_icon": {
+        "48": "icons/icons8-phishing-48.png",
+        "128": "icons/icons8-phishing-48.png"
+      }
+    },
+    "host_permissions": [
+      "http://localhost:5000/*"
+    ],
+    "background": {
+      "service_worker": "background.js"
+    },
+    "icons": {
+      "128": "icons/icons8-phishing-48.png"
+    }
+  }
+  
