@@ -72,3 +72,32 @@ h3 {
 #result {
   margin-top: 15px;
 }
+
+/* Styles for warning, recommendation and URL length */
+.result-item.warning {
+  background-color: #fff3cd;
+  border: 1px solid #ffeeba;
+  padding: 10px;
+  border-radius: 4px;
+  margin: 10px 0;
+}
+
+.result-item.recommendation {
+  background-color: #d4edda;
+  border: 1px solid #c3e6cb;
+  padding: 10px;
+  border-radius: 4px;
+  margin: 10px 0;
+}
+
+.result-item.url-length {
+  background-color: #e2e3e5;
+  border: 1px solid #d6d8db;
+  padding: 10px;
+  border-radius: 4px;
+  margin: 10px 0;
+}
+
+.info-icon {
+  color: #17a2b8;
+}

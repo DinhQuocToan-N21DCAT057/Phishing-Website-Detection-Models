@@ -54,7 +54,8 @@ document.getElementById("checkBtn").addEventListener("click", () => {
         { name: "CNN-LSTM Numerical", data: data?.cnn_lstm_model_numerical },
         { name: "CNN-LSTM Text", data: data?.cnn_lstm_model_text },
         { name: "CNN Numerical", data: data?.cnn_model_numerical },
-        { name: "CNN Text", data: data?.cnn_model_text }
+        { name: "CNN Text", data: data?.cnn_model_text },
+        { name: "Transformer BERT", data: data?.transformers_bert_model_text }
       ];
 
       const results = models.map(model => {
@@ -74,6 +75,31 @@ document.getElementById("checkBtn").addEventListener("click", () => {
           ${model.name}: ${isPhishing ? "Phishing" : "Safe"} (Confidence: ${conf}%)
         </div>`;
       });
+
+      // Add warning, recommendation and URL length information if present
+      if (data.warning) {
+        results.push(`
+          <div class="result-item warning">
+            <i class="fas fa-exclamation-circle warning-icon"></i>
+            ${data.warning}
+          </div>`);
+      }
+
+      if (data.recommendation) {
+        results.push(`
+          <div class="result-item recommendation">
+            <i class="fas fa-lightbulb info-icon"></i>
+            ${data.recommendation}
+          </div>`);
+      }
+
+      if (data.url_length) {
+        results.push(`
+          <div class="result-item url-length">
+            <i class="fas fa-ruler info-icon"></i>
+            URL Length: ${data.url_length === 'long' ? 'Long URL (> 256 characters)' : 'Normal URL length'}
+          </div>`);
+      }
 
       resultDiv.innerHTML = results.join("");
     })
@@ -100,4 +126,3 @@ document.getElementById("checkBtn").addEventListener("click", () => {
       loader.style.display = "none";
     });
   });
-  
