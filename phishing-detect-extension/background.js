@@ -34,13 +34,27 @@ async function checkUrl(url) {
             'cnn_lstm_model_numerical',
             'cnn_lstm_model_text',
             'cnn_model_numerical',
-            'cnn_model_text'
+            'cnn_model_text',
+            'transformers_bert_model_text'
         ];
 
         for (const model of requiredModels) {
             if (!data[model] || !('label' in data[model]) || !('confidence' in data[model])) {
                 throw new Error(`Missing or invalid ${model} data`);
             }
+        }
+
+        // Handle warning and recommendation if present
+        if (data.warning) {
+            console.log('Warning:', data.warning);
+        }
+        
+        if (data.recommendation) {
+            console.log('Recommendation:', data.recommendation);
+        }
+
+        if (data.url_length) {
+            console.log('URL Length:', data.url_length);
         }
         
         // Cache the result

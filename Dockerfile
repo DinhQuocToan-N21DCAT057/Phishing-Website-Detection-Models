@@ -19,7 +19,14 @@ RUN apt-get update && apt-get install -y \
 WORKDIR /app
 
 # Copy toàn bộ project vào container
-COPY . .
+COPY script/ ./script/ 
+COPY CNN_LSTM_MODEL_ON_FEATURE_EXTRACTED.h5 . 
+COPY CNN_LSTM_MODEL_ON_NON_FEATURE_EXTRACTED.h5 . 
+COPY CNN_MODEL_ON_FEATURE_EXTRACTED.h5 . 
+COPY CNN_MODEL_ON_NON_FEATURE_EXTRACTED.h5 . 
+COPY TRANSFORMER_MODEL_ON_NON_FEATURE_EXTRACTED.pth . 
+COPY tfidf_vectorizer.pkl . 
+COPY requirements.txt .
 
 # Cài đặt thư viện Python
 RUN pip install --upgrade pip
