@@ -1,4 +1,4 @@
-# Website Phishing Detection Models
+# Phishing Website Detection Models
 
 ## Introduction
 This project leverages deep learning models (LSTM, CNN, and Transformer) to detect phishing websites based on URL features. The Jupyter Notebook provides a comprehensive workflow for data analysis, model training, and performance evaluation, including visualizations such as accuracy plots and result tables. Developed on Google Colab, the notebook can be viewed in detail via nbviewer or open .ipynb file using Jupyter Notebook/Colab.
