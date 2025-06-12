@@ -1,7 +1,7 @@
 # Website Phishing Detection Models
 
 ## Introduction
-This project leverages deep learning models (LSTM, CNN, and Transformer) to detect phishing websites based on URL features. The Jupyter Notebook provides a comprehensive workflow for data analysis, model training, and performance evaluation, including visualizations such as accuracy plots and result tables. Developed on Google Colab, the notebook can be viewed in detail via nbviewer or the provided HTML file.
+This project leverages deep learning models (LSTM, CNN, and Transformer) to detect phishing websites based on URL features. The Jupyter Notebook provides a comprehensive workflow for data analysis, model training, and performance evaluation, including visualizations such as accuracy plots and result tables. Developed on Google Colab, the notebook can be viewed in detail via nbviewer or open .ipynb file using Jupyter Notebook/Colab.
 
 ## Summary Results of Each Model
 
@@ -122,6 +122,9 @@ This project leverages deep learning models (LSTM, CNN, and Transformer) to dete
   ```
 - **Visit Docker Hub**:
   - Check the image details at: [https://hub.docker.com/repository/docker/dinhtoan2157/phishing-api/](https://hub.docker.com/repository/docker/dinhtoan2157/phishing-api/)
+
+- **DOWNLOAD TRANSFORMERS's BERT MODEL**
+  - Important: Because the TRANSFORMERS's BERT model cant be push via git you must download it seperately here: [transformers-bert-download](https://drive.google.com/file/d/1w5YeG1YkgXCMvLuv-o-VAsndRWEhMMf9/view?usp=sharing)
 
 ### Extension
 - **Installation**:
