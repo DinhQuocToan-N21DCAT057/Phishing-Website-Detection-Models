@@ -2,7 +2,7 @@
 # -*- coding: utf-8 -*-
 """
 Script to extract features from URLs and generate a phishing dataset CSV.
-Uses functions from url_features.py, content_features.py, external_features.py, and feature_extractor.py.
+Uses functions from url_features.py, content_features.py, external_features.py, and feature_dictionnary.py.
 """
 
 import requests
@@ -43,7 +43,7 @@ from external_features import (
 import concurrent.futures
 
 
-# Timeout handling from feature_extractor.py
+# Timeout handling from feature_dictionnary.py
 class TimedOutExc(Exception):
     pass
 
