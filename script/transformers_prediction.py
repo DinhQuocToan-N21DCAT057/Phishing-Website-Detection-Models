@@ -131,7 +131,7 @@ if __name__ == "__main__":
 
     # Test with single URL
     test_urls = ["https://www.google.com/"]
-    results = predict_url(test_urls, model, tokenizer)
+    results = transformers_predict(test_urls, model, tokenizer)
     for result in results:
         if "error" in result:
             print(f"URL: {result['url']}, Error: {result['error']}")

@@ -485,7 +485,7 @@ def process_urls(urls, labels=None):
 # Example usage
 if __name__ == "__main__":
     # Example URLs and labels
-    urls = ['https://uis.ptithcm.edu.vn/']
+    urls = ['https://efootballhub.net/']
     labels = ['legitimate']
 
     # Process URLs and save to CSV
