@@ -105,7 +105,7 @@ phishing_features_dict = {
         Ví dụ: http://www.crestonwood.com/router.php có nb_com=0.
     """,
     "nb_dslash": """
-        Số lượng dấu gạch chéo kép (//) trong URL.
+        Số lượng dấu gạch chéo kép '//' trong URL.
         Ví dụ: http://www.crestonwood.com/router.php có 1 //.
     """,
     "http_in_path": """
@@ -154,7 +154,7 @@ phishing_features_dict = {
         Ví dụ: http://www.crestonwood.com/router.php có nb_subdomains=3.
     """,
     "prefix_suffix": """
-        Domain có dấu gạch ngang (-) không.
+        Domain có dấu gạch ngang '-' không.
         Giá trị: 1 (Có), 0 (Không).
         Ví dụ: https://www-cwbank.com/en/business có prefix_suffix=1.
     """,
